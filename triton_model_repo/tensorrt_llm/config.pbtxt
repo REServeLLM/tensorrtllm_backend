@@ -25,16 +25,16 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 name: "tensorrt_llm"
-backend: "${triton_backend}"
-max_batch_size: ${triton_max_batch_size}
+backend: "tensorrtllm"
+max_batch_size: 64
 
 model_transaction_policy {
-  decoupled: ${decoupled_mode}
+  decoupled: False
 }
 
 dynamic_batching {
-    preferred_batch_size: [ ${triton_max_batch_size} ]
-    max_queue_delay_microseconds: ${max_queue_delay_microseconds}
+    preferred_batch_size: [ 64 ]
+    max_queue_delay_microseconds: 0
 }
 
 input [
@@ -347,7 +347,7 @@ instance_group [
 parameters: {
   key: "max_beam_width"
   value: {
-    string_value: "${max_beam_width}"
+    string_value: "1"
   }
 }
 parameters: {
@@ -359,25 +359,25 @@ parameters: {
 parameters: {
   key: "gpt_model_type"
   value: {
-    string_value: "${batching_strategy}"
+    string_value: "inflight_fused_batching"
   }
 }
 parameters: {
   key: "gpt_model_path"
   value: {
-    string_value: "${engine_dir}"
+    string_value: "/workspace/engines/Meta-Llama-3-8B-Instruct-2GPU-2TP-1PP"
   }
 }
 parameters: {
   key: "max_tokens_in_paged_kv_cache"
   value: {
-    string_value: "${max_tokens_in_paged_kv_cache}"
+    string_value: "1280"
   }
 }
 parameters: {
   key: "max_attention_window_size"
   value: {
-    string_value: "${max_attention_window_size}"
+    string_value: "1280"
   }
 }
 parameters: {
@@ -395,7 +395,7 @@ parameters: {
 parameters: {
   key: "kv_cache_free_gpu_mem_fraction"
   value: {
-    string_value: "${kv_cache_free_gpu_mem_fraction}"
+    string_value: "0.5"
   }
 }
 parameters: {
@@ -420,7 +420,7 @@ parameters: {
 parameters: {
   key: "exclude_input_in_output"
   value: {
-    string_value: "${exclude_input_in_output}"
+    string_value: "True"
   }
 }
 parameters: {
@@ -450,7 +450,7 @@ parameters: {
 parameters: {
   key: "enable_kv_cache_reuse"
   value: {
-    string_value: "${enable_kv_cache_reuse}"
+    string_value: "False"
   }
 }
 parameters: {
